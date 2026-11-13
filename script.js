@@ -6,18 +6,18 @@
 // thumb kosong atau gagal dimuat: kartu menampilkan inisial (ikon).
 const layanan = [
   {
-    nama: "SIADIK",
-    ikon: "SI",
-    url: "https://siadik.sisdm-ppnp.id",
-    thumb: "https://i.ibb.co.com/K3VCNTR/Siadik.png",
-    desk: "Sistem Informasi Arsip Digital Kepegawaian untuk menyimpan, mencari, dan mengelola dokumen kepegawaian PPNP.",
-  },
-  {
     nama: "Presensi",
     ikon: "PR",
     url: "https://presensi.sisdm-ppnp.id",
     thumb: "https://i.ibb.co.com/rRZyGb1J/presensi.png",
     desk: "Sistem presensi dan pengelolaan kehadiran Dosen di lingkungan PPNP.",
+  },
+  {
+    nama: "SIADIK",
+    ikon: "SI",
+    url: "https://siadik.sisdm-ppnp.id",
+    thumb: "https://i.ibb.co.com/K3VCNTR/Siadik.png",
+    desk: "Sistem Informasi Arsip Digital Kepegawaian untuk menyimpan, mencari, dan mengelola dokumen kepegawaian PPNP.",
   },
   {
     nama: "SPMI",
