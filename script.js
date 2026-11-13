@@ -208,3 +208,11 @@ function route() {
 
 window.addEventListener("hashchange", route);
 route();
+
+document.querySelectorAll("[data-k]").forEach((el) => {
+  const isi = kontak[el.dataset.k] || "";
+  el.textContent = isi;
+  const angka = isi.replace(/[^\d+]/g, "");
+  if (el.dataset.link === "tel" && angka.length >= 6) el.href = "tel:" + angka;
+  if (el.dataset.link === "mailto") el.href = "mailto:" + isi;
+});

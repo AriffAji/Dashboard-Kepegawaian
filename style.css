@@ -471,23 +471,15 @@ footer {
 }
 /* ---------- Contact Hero ---------- */
 .contact-hero {
-  background: var(--green);
-  color: #fff;
-  padding: 56px 0;
+  background: #fff;
+  border-top: 1px solid var(--line);
+  padding: 56px 0 64px;
 }
 .contact-hero h2 {
-  margin: 0 0 8px;
-  font-size: clamp(26px, 4vw, 36px);
+  margin: 0 0 24px;
+  font-size: clamp(24px, 4vw, 32px);
   font-weight: 600;
-  line-height: 1.15;
-}
-.contact-hero .jam {
-  margin: 0 0 28px;
-  font-size: 17px;
-}
-.contact-hero .jam span {
-  color: var(--mint);
-  font-weight: 600;
+  line-height: 1.2;
 }
 .cgrid {
   display: grid;
@@ -496,6 +488,7 @@ footer {
 }
 .citem {
   background: #fff;
+  border: 1px solid var(--line);
   border-radius: 16px;
   padding: 20px;
 }
@@ -540,4 +533,14 @@ footer {
 }
 .fcols .logo {
   margin: 0 -5px; /* buang ruang kosong transparan di tepi logo */
+}
+
+.two {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 32px;
+  align-items: start;
+}
+.two .art {
+  align-self: center;
 }
