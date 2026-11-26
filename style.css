@@ -834,3 +834,9 @@ nav {
     border-color 0.3s,
     fill 0.3s !important;
 }
+
+/* Fallback keras: pastikan elemen AOS selalu tampil meskipun library gagal dimuat */
+[data-aos] {
+  opacity: 1 !important;
+  transform: none !important;
+}
