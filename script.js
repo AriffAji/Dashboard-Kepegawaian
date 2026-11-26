@@ -95,13 +95,6 @@ const kontak = {
   email: "kepegawaianpolitanipyk@gmail.com",
 };
 
-document.querySelectorAll("[data-k]").forEach((el) => {
-  const isi = kontak[el.dataset.k] || "";
-  el.textContent = isi;
-  if (el.dataset.link === "tel") el.href = "tel:" + isi.replace(/[^\d+]/g, "");
-  if (el.dataset.link === "mailto") el.href = "mailto:" + isi;
-});
-
 /* =====================================================
    KODE
    ===================================================== */
@@ -135,37 +128,6 @@ function esc(s) {
       })[c],
   );
 }
-
-/* ---------- AOS (animasi saat scroll) ---------- */
-const kurangiGerak = window.matchMedia(
-  "(prefers-reduced-motion: reduce)",
-).matches;
-const aktifAOS = typeof AOS !== "undefined" && !kurangiGerak;
-
-// Atribut AOS untuk kartu yang dirender lewat JS (kosong jika AOS mati)
-const aosAttr = (delay = 0) =>
-  aktifAOS ? ` data-aos="fade-up" data-aos-delay="${delay}"` : "";
-
-if (aktifAOS) {
-  AOS.init({ duration: 600, easing: "ease-out-cubic", once: true, offset: 60 });
-  window.addEventListener("load", () => AOS.refreshHard());
-  // Tandai elemen yang animasi masuknya sudah selesai, agar transisi hover bisa dipakai normal
-  document.addEventListener("transitionend", (e) => {
-    const el = e.target;
-    if (
-      e.propertyName === "opacity" &&
-      el.matches &&
-      el.matches("[data-aos].aos-animate")
-    )
-      el.classList.add("aos-done");
-  });
-} else {
-  // AOS gagal dimuat / pengguna minta gerak dikurangi: pastikan konten tetap tampil
-  document
-    .querySelectorAll("[data-aos]")
-    .forEach((el) => el.removeAttribute("data-aos"));
-}
-const refreshAOS = () => aktifAOS && AOS.refreshHard();
 
 /* ---------- Skeleton loading ---------- */
 // Skeleton tampil minimal SKELETON_MS, dan menunggu thumbnail selesai dimuat
@@ -238,7 +200,7 @@ function sorot(teks, k) {
   return out + esc(teks.slice(i));
 }
 
-function renderLayanan(grid, empty, kata, animasi = false) {
+function renderLayanan(grid, empty, kata) {
   const k = kata.trim().toLowerCase();
   const list = layanan.filter((l) =>
     (l.nama + " " + l.desk).toLowerCase().includes(k),
@@ -246,8 +208,8 @@ function renderLayanan(grid, empty, kata, animasi = false) {
   grid.removeAttribute("aria-busy");
   grid.innerHTML = list
     .map(
-      (l, i) => `
-    <article class="card"${animasi ? aosAttr((i % 3) * 100) : ""}>
+      (l) => `
+    <article class="card">
       <div class="thumb${l.thumb ? " sk" : ""}">${l.thumb ? `<img src="${esc(l.thumb)}" alt="Tampilan ${esc(l.nama)}" data-ikon="${esc(l.ikon)}" loading="lazy" decoding="async">` : esc(l.ikon)}</div>
       <div class="body"><h3>${sorot(l.nama, k)}</h3><p>${sorot(l.desk, k)}</p>
       <a href="${esc(l.url)}" target="_blank" rel="noopener">Selengkapnya ↗</a></div>
@@ -283,13 +245,12 @@ function pasangPencarian(inputId, gridId, emptyId) {
   skeletonLayanan(grid, Math.min(layanan.length, 6));
   input.addEventListener("input", () => {
     if (!siap) return;
-    clearTimeout(tunda); // debounce; saat mengetik: tanpa animasi ulang
+    clearTimeout(tunda); // debounce
     tunda = setTimeout(() => renderLayanan(grid, empty, input.value), 150);
   });
   kontenSiap.then(() => {
     siap = true;
-    renderLayanan(grid, empty, input.value, true);
-    refreshAOS();
+    renderLayanan(grid, empty, input.value);
   });
 }
 
@@ -303,20 +264,23 @@ kontenSiap.then(() => {
   fgrid.removeAttribute("aria-busy");
   fgrid.innerHTML = fungsi
     .map(
-      (f, i) => `
-  <article class="fcard"${aosAttr((i % 4) * 80)}>
+      (f) => `
+  <article class="fcard">
     <div class="ficon"><svg viewBox="0 0 24 24" aria-hidden="true">${ikonSvg[f.ikon] || ""}</svg></div>
     <h3>${esc(f.judul)}</h3>
     <p>${esc(f.desk)}</p>
   </article>`,
     )
     .join("");
-  refreshAOS();
 });
 
 /* ---------- Kontak ---------- */
 document.querySelectorAll("[data-k]").forEach((el) => {
-  el.textContent = kontak[el.dataset.k] || "";
+  const isi = kontak[el.dataset.k] || "";
+  el.textContent = isi;
+  const angka = isi.replace(/[^\d+]/g, "");
+  if (el.dataset.link === "tel" && angka.length >= 6) el.href = "tel:" + angka;
+  if (el.dataset.link === "mailto") el.href = "mailto:" + isi;
 });
 
 /* ---------- Pergantian halaman lewat menu (hash) ---------- */
@@ -340,25 +304,10 @@ function route() {
   });
   document.title = judulHalaman[h];
   window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-  if (aktifAOS) {
-    // halaman yang baru tampil: putar ulang animasi & hitung ulang posisi
-    document
-      .querySelectorAll(`[data-page="${h}"] [data-aos]`)
-      .forEach((el) => el.classList.remove("aos-animate", "aos-done"));
-    AOS.refreshHard();
-  }
 }
 
 window.addEventListener("hashchange", route);
 route();
-
-document.querySelectorAll("[data-k]").forEach((el) => {
-  const isi = kontak[el.dataset.k] || "";
-  el.textContent = isi;
-  const angka = isi.replace(/[^\d+]/g, "");
-  if (el.dataset.link === "tel" && angka.length >= 6) el.href = "tel:" + angka;
-  if (el.dataset.link === "mailto") el.href = "mailto:" + isi;
-});
 
 /* ---------- Header berbayang saat scroll + tombol ke atas ---------- */
 const headerEl = document.querySelector("header");

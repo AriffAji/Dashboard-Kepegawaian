@@ -97,6 +97,7 @@ nav {
   display: flex;
   gap: 6px;
   flex-wrap: wrap;
+  align-items: center;
 }
 nav a {
   padding: 8px 14px;
@@ -105,6 +106,9 @@ nav a {
   color: var(--ink);
   font-size: 14px;
   font-weight: 500;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
 }
 nav a.on {
   background: var(--green);
@@ -159,6 +163,14 @@ nav a:hover:not(.on) {
   border: 1.5px solid #fff;
   color: #fff;
   margin: 0 8px 8px 0;
+  transition:
+    transform 0.15s,
+    background-color 0.15s,
+    color 0.15s,
+    border-color 0.15s;
+}
+.btn:active {
+  transform: scale(0.97);
 }
 .btn.f {
   background: #fff;
@@ -268,12 +280,19 @@ nav a:hover:not(.on) {
   background: var(--surface);
   transition:
     border-color 0.15s,
-    box-shadow 0.15s;
+    box-shadow 0.15s,
+    transform 0.2s;
 }
 .card:hover,
 .card:focus-within {
   border-color: var(--green);
   box-shadow: 0 4px 16px rgba(33, 90, 43, 0.15);
+  transform: translateY(-3px);
+}
+.card.skel:hover {
+  border-color: var(--line);
+  box-shadow: none;
+  transform: none;
 }
 .thumb {
   height: 200px;
@@ -394,6 +413,9 @@ nav a:hover:not(.on) {
   gap: 32px;
   align-items: start;
 }
+.two .art {
+  align-self: center;
+}
 .prose p {
   margin: 0 0 16px;
   color: var(--ink);
@@ -464,10 +486,15 @@ footer {
   margin: 8px 0 0;
 }
 .fcols .logo {
-  margin-bottom: 8px;
+  margin: 0 -5px 8px; /* buang ruang kosong transparan di tepi logo */
 }
 .fcols b {
   color: var(--ink);
+}
+.fbrand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 .copy {
   border-top: 1px solid var(--line);
@@ -494,6 +521,7 @@ footer {
     flex-wrap: wrap;
   }
 }
+
 /* ---------- Contact Hero ---------- */
 .contact-hero {
   background: var(--bg);
@@ -550,26 +578,6 @@ footer {
   }
 }
 
-/* footer */
-.fbrand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.fcols .logo {
-  margin: 0 -5px; /* buang ruang kosong transparan di tepi logo */
-}
-
-.two {
-  display: grid;
-  grid-template-columns: 1.5fr 1fr;
-  gap: 32px;
-  align-items: start;
-}
-.two .art {
-  align-self: center;
-}
-
 /* ---------- Skeleton loading ---------- */
 .sk,
 .thumb.sk,
@@ -612,10 +620,6 @@ footer {
   margin-top: 8px;
   margin-bottom: 0;
 }
-.card.skel:hover {
-  border-color: var(--line);
-  box-shadow: none;
-}
 .fcard.skel .sk-line:last-child {
   margin-bottom: 0;
 }
@@ -632,6 +636,7 @@ footer {
 }
 
 /* ---------- Penghalus (transisi halaman, hover, header, tombol) ---------- */
+/* Transisi halaman: murni CSS lokal, tidak bergantung library luar */
 [data-page]:not([hidden]) {
   animation: pgin 0.28s ease both;
 }
@@ -651,44 +656,6 @@ header {
 }
 header.scrolled {
   box-shadow: 0 2px 14px rgba(16, 24, 40, 0.08);
-}
-nav a {
-  transition:
-    background-color 0.2s,
-    color 0.2s;
-}
-.btn {
-  transition:
-    transform 0.15s,
-    background-color 0.15s,
-    color 0.15s,
-    border-color 0.15s;
-}
-.btn:active {
-  transform: scale(0.97);
-}
-
-/* Hover kartu: angkat tipis. Setelah animasi AOS selesai (.aos-done), transisi & delay dikembalikan normal. */
-.card:not([data-aos]) {
-  transition:
-    border-color 0.15s,
-    box-shadow 0.15s,
-    transform 0.2s;
-}
-.card[data-aos].aos-done,
-.fcard[data-aos].aos-done {
-  transition:
-    border-color 0.15s,
-    box-shadow 0.15s,
-    transform 0.2s !important;
-}
-.card:not([data-aos]):hover,
-.card[data-aos].aos-done:hover,
-.card[data-aos].aos-done:focus-within {
-  transform: translateY(-3px);
-}
-.card.skel:hover {
-  transform: none;
 }
 
 mark {
@@ -764,9 +731,6 @@ mark {
 }
 
 /* ---------- Mode gelap ---------- */
-nav {
-  align-items: center;
-}
 .theme {
   width: 38px;
   height: 38px;
@@ -833,10 +797,4 @@ nav {
     color 0.3s,
     border-color 0.3s,
     fill 0.3s !important;
-}
-
-/* Fallback keras: pastikan elemen AOS selalu tampil meskipun library gagal dimuat */
-[data-aos] {
-  opacity: 1 !important;
-  transform: none !important;
 }
